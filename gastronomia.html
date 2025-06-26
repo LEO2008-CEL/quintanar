@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gastronomía de Quintana Roo</title>
+    <link rel="icon" href="logo.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos generales (duplicados por requisito) */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #0056b3;
+            color: white;
+            padding: 15px 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo a {
+            color: white;
+            text-decoration: none;
+            font-size: 2.2em;
+            font-weight: bold;
+            font-family: 'Pacifico', cursive;
+            transition: transform 0.3s ease;
+        }
+
+        .logo a:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1em;
+            padding: 5px 0;
+            position: relative;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background-color: #ffd700;
+            left: 0;
+            bottom: -5px;
+            transition: width 0.3s ease-in-out;
+        }
+
+        .nav-links a:hover {
+            color: #ffd700;
+            transform: translateY(-2px);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .burger {
+            display: none;
+            cursor: pointer;
+        }
+
+        .burger div {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .section {
+            padding: 80px 5%;
+            margin: 40px auto;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            max-width: 1200px;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+
+        .section h2 {
+            font-size: 3em;
+            color: #0056b3;
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            font-family: 'Pacifico', cursive;
+            letter-spacing: 1px;
+        }
+
+        .section h2 i {
+            margin-right: 15px;
+            color: #ffd700;
+        }
+
+        .section h2::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background-color: #ffd700;
+            margin: 15px auto 0;
+            border-radius: 2px;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .text-content p {
+            font-size: 1.15em;
+            margin-bottom: 20px;
+            color: #555;
+            text-align: justify;
+        }
+
+        .text-content ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 30px;
+        }
+
+        .text-content ul li {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            padding-left: 30px;
+            position: relative;
+            color: #444;
+        }
+
+        .text-content ul li i {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #0056b3;
+            font-size: 1.3em;
+            margin-right: 10px;
+        }
+
+        .image-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: relative;
+        }
+
+        .image-content img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            transition: transform 0.4s ease-in-out, filter 0.4s ease-in-out;
+        }
+
+        .image-content img:hover {
+            transform: scale(1.03);
+            filter: brightness(0.9);
+        }
+
+        footer {
+            background-color: #003366;
+            color: white;
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 60px;
+            font-size: 0.9em;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* -------------------- Animaciones CSS (Keyframes) -------------------- */
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInZoom {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); }
+            100% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(255, 215, 0, 0); }
+        }
+
+        @keyframes slideInBottom {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes bounceIn {
+            0% { transform: translateY(-50%) scale(0.3); opacity: 0; }
+            50% { transform: translateY(-50%) scale(1.1); opacity: 1; }
+            70% { transform: translateY(-50%) scale(0.9); }
+            100% { transform: translateY(-50%) scale(1); }
+        }
+
+        .section.reveal-left {
+            transform: translateX(-100px);
+            opacity: 0;
+            transition: transform 1s ease-out, opacity 1s ease-out;
+        }
+
+        .section.reveal-right {
+            transform: translateX(100px);
+            opacity: 0;
+            transition: transform 1s ease-out, opacity 1s ease-out;
+        }
+
+        .section.reveal-bottom {
+            transform: translateY(50px);
+            opacity: 0;
+            transition: transform 1s ease-out, opacity 1s ease-out;
+        }
+
+        .section.revealed {
+            transform: translateX(0) translateY(0);
+            opacity: 1;
+        }
+
+        @keyframes navLinkFade {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0px); }
+        }
+
+        /* -------------------- Media Queries para Responsividad -------------------- */
+        @media (max-width: 992px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px 20px;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                width: 100%;
+                text-align: center;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.5s ease-in-out;
+                background-color: #004285;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .nav-links.nav-active {
+                max-height: 500px;
+            }
+
+            .nav-links li {
+                margin: 0;
+                padding: 15px 0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .nav-links li:last-child {
+                border-bottom: none;
+            }
+
+            .nav-links a {
+                display: block;
+                padding: 10px 0;
+                font-size: 1.2em;
+            }
+            .nav-links a::after {
+                display: none;
+            }
+
+            .burger {
+                display: block;
+                position: absolute;
+                right: 20px;
+                top: 25px;
+            }
+
+            .burger.toggle .line1 {
+                transform: rotate(-45deg) translate(-5px, 6px);
+            }
+            .burger.toggle .line2 {
+                opacity: 0;
+            }
+            .burger.toggle .line3 {
+                transform: rotate(45deg) translate(-5px, -6px);
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .section {
+                padding: 60px 4%;
+                margin: 30px auto;
+            }
+
+            .section h2 {
+                font-size: 2.5em;
+                margin-bottom: 40px;
+            }
+
+            .text-content p, .text-content ul li {
+                font-size: 1em;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .section h2 {
+                font-size: 2em;
+            }
+            .text-content p, .text-content ul li {
+                font-size: 1em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 10px 15px;
+            }
+            .logo a {
+                font-size: 1.8em;
+            }
+            .burger {
+                top: 15px;
+            }
+            .section {
+                padding: 40px 3%;
+                margin: 20px auto;
+            }
+            .section h2 {
+                font-size: 1.8em;
+                margin-bottom: 30px;
+            }
+            .text-content p, .text-content ul li {
+                font-size: 0.95em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <a href="index.html">Quintana Roo</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="flora.html"><i class="fas fa-leaf"></i> Flora</a></li>
+                <li><a href="fauna.html"><i class="fas fa-cat"></i> Fauna</a></li>
+                <li><a href="gastronomia.html"><i class="fas fa-utensils"></i> Gastronomía</a></li>
+                <li><a href="turismo.html"><i class="fas fa-plane-departure"></i> Turismo</a></li>
+                <li><a href="cultura.html"><i class="fas fa-mask"></i> Cultura</a></li>
+                <li><a href="mapa.html"><i class="fas fa-map-marked-alt"></i> Mapa</a></li>
+                <li><a href="cuestionario.html"><i class="fas fa-question-circle"></i> Cuestionario</a></li>
+                <li><a href="rompecabezas.html"><i class="fas fa-puzzle-piece"></i> Rompecabezas</a></li>
+            </ul>
+            <div class="burger">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+
+    <div id="reloj"></div>
+
+    <script>
+        function actualizarHora() {
+            const ahora = new Date();
+            const opciones = {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false // Formato de 24 horas
+            };
+            const horaFormateada = ahora.toLocaleTimeString('es-MX', opciones);
+            document.getElementById('reloj').textContent = horaFormateada;
+        }
+
+        // Actualiza la hora cada segundo
+        setInterval(actualizarHora, 1000);
+
+        // Llama a la función una vez al cargar la página para mostrar la hora inmediatamente
+        actualizarHora();
+    </script>
+        </nav>
+    </header>
+
+    <main>
+        <section id="gastronomia-section" class="section reveal-bottom">
+            <h2><i class="fas fa-utensils"></i> Delicias Gastronómicas</h2>
+            <div class="content-grid">
+                <div class="text-content">
+                    <p>La gastronomía de Quintana Roo es un festín de sabores, resultado de la fusión de la cocina maya prehispánica con influencias españolas y del Caribe. Se caracteriza por el uso de ingredientes frescos del mar y de la selva, especias y técnicas de cocción ancestrales.</p>
+                    <p>Entre los platillos que no puedes dejar de probar se encuentran:</p>
+                    <ul>
+                        <li><i class="fas fa-pepper-hot" style="animation: bounceIn 0.8s ease-out forwards; animation-delay: 0.1s;"></i> **Cochinita Pibil:** Cerdo marinado en achiote y naranja agria, cocido lentamente bajo tierra (pib) hasta quedar tierno. Se sirve en tacos o tortas con cebolla morada encurtida.</li>
+                        <li><i class="fas fa-fish" style="animation: bounceIn 0.8s ease-out forwards; animation-delay: 0.2s;"></i> **Pescado Tikin Xic:** Pescado entero marinado con achiote y especias, envuelto en hojas de plátano y asado a las brasas o al horno. Un sabor auténtico del Caribe.</li>
+                        <li><i class="fas fa-shrimp" style="animation: bounceIn 0.8s ease-out forwards; animation-delay: 0.3s;"></i> **Panuchos y Salbutes:** Tortillas fritas, rellenas o cubiertas con diversos ingredientes como cochinita, pavo en escabeche, pollo, y adornados con lechuga, tomate y cebolla.</li>
+                        <li><i class="fas fa-drumstick-bite" style="animation: bounceIn 0.8s ease-out forwards; animation-delay: 0.4s;"></i> **Relleno Negro:** Un guiso complejo a base de pavo y un recado de chiles secos (conocido como "chilmole"), que le da un color oscuro y un sabor profundo.</li>
+                        <li><i class="fas fa-lemon" style="animation: bounceIn 0.8s ease-out forwards; animation-delay: 0.5s;"></i> **Sopa de Lima:** Una sopa ligera y refrescante, hecha con caldo de pollo, pollo desmenuzado, tortilla frita y el toque cítrico de la lima.</li>
+                        <li><i class="fas fa-cocktail" style="animation: bounceIn 0.8s ease-out forwards; animation-delay: 0.6s;"></i> **Aguas Frescas:** Bebidas refrescantes de frutas tropicales como horchata, jamaica, tamarindo y la exótica chaya.</li>
+                    </ul>
+                    <p>Cada bocado es un viaje por la historia y la cultura de esta fascinante región.</p>
+                </div>
+                <div class="image-content">
+                    <img src="cochinita.jpg" alt="Cochinita Pibil" style="animation: fadeInZoom 1s ease-out forwards; animation-delay: 0.3s;">
+                    <img src="pescado.jpg" alt="Pescado Tikin Xic" style="animation: fadeInZoom 1s ease-out forwards; animation-delay: 0.6s;">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Explorando Quintana Roo. Todos los derechos reservados Jorge, Leo y Leonardo.</p>
+    </footer>
+
+    <script>
+        const burger = document.querySelector('.burger');
+        const nav = document.querySelector('.nav-links');
+        const navLinks = document.querySelectorAll('.nav-links li');
+
+        burger.addEventListener('click', () => {
+            nav.classList.toggle('nav-active');
+            navLinks.forEach((link, index) => {
+                if (link.style.animation) {
+                    link.style.animation = '';
+                } else {
+                    link.style.animation = `navLinkFade 0.5s ease forwards ${index / 7 + 0.3}s`;
+                }
+            });
+            burger.classList.toggle('toggle');
+        });
+
+        const sections = document.querySelectorAll('.section');
+        const revealSection = (entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                    observer.unobserve(entry.target);
+                }
+            });
+        };
+        const sectionObserver = new IntersectionObserver(revealSection, {
+            root: null,
+            threshold: 0.15
+        });
+        sections.forEach(section => {
+            sectionObserver.observe(section);
+        });
+
+        const listIcons = document.querySelectorAll('.text-content ul li i');
+        listIcons.forEach(icon => {
+            icon.style.animation = `bounceIn 0.8s ease-out forwards var(--delay)`;
+        });
+    </script>
+</body>
+</html>
